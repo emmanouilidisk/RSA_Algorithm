@@ -1,26 +1,22 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
 #include "boost_1_66_0/boost/multiprecision/cpp_int.hpp"
 #include <iostream>
-#include <sstream>
 #include <fstream>
-using big_int = boost::multiprecision::cpp_int ;
+using big_int = boost::multiprecision::cpp_int;
 
 class RSA {
   int privateKey;
   int publicKey;
   int modulo;
-  bool PrimalityTest(int a, int i);
-  big_int FindT(big_int a, int m, int n);
-  void FastExponention(int bit, int n, big_int * y, big_int* a);
-  int GCD(int a, int b);
+  bool PrimalityTest(int IterNum, int i);
+  big_int ModularExponentiation(big_int a, int m, int n);
   int ExtendedGCD(int a, int b);
   public:
   RSA();
-  void Encryption(int value, std::ofstream &out);
-  void Decryption(int value, std::ofstream &out);
+  void Encryption(std::ifstream& inp, std::string plainFile, std::ofstream& out, std::string cipherFile);
+  void Decryption(std::ifstream& inp, std::string cipherFile, std::ofstream& out, std::string decipherFile);
 };
 
 RSA::RSA(){
@@ -30,192 +26,183 @@ RSA::RSA(){
       do
       p = rand();
       while (p % 2 == 0);
-    } while (!PrimalityTest(2, p));
+    } while (!PrimalityTest(20, p));
 
   do {
     do
       q = rand();
     while (q % 2 == 0);
-  } while (!PrimalityTest(2, q));
+  } while (!PrimalityTest(20, q));
 
-	modulo = p * q;
-	phi_n = (p - 1) * (q - 1);
+  modulo = p * q;
+  phi_n = (p - 1) * (q - 1);
 
-	do
-		publicKey = rand() % (phi_n - 2) + 2; // 1 < e < phi_n
-	while (GCD(publicKey, phi_n) != 1);
+  do
+    publicKey = rand() % (phi_n - 2) + 2; // 1 < publicKey < phi_n
+  while (std::__gcd(publicKey, phi_n) != 1);
 
-	privateKey = ExtendedGCD(phi_n, publicKey);
-  std::cout << publicKey << " " << privateKey << std::endl;
+  privateKey = ExtendedGCD(phi_n, publicKey);
 }
 
-bool RSA::PrimalityTest(int a, int i){
-	int n = i - 1;
-	int k = 0;
-	int j, m;
-  big_int T;
+bool RSA::PrimalityTest(int IterNum, int n){
+  if (n%3 == 0|| n%5 == 0|| n%7 == 0||n%11 == 0)
+    return false;
+  for (int j = 0; j < IterNum; ++j){
+    int d = n - 1;
+    int k = 0;
+    big_int T;
+    // select a random base
+    int a = 2 + rand() % (n - 4); 
 
-  while (n % 2 == 0) {
-    k++;
-    n = n / 2;
-	}
+    // Find d,k such that n = (2^k)*d + 1
+    while (d % 2 == 0) {
+      k++;
+      d = d / 2;
+    }
 
-	m = n;
-	T = FindT(a, m, i);
+    // Miller-Rabin test
+    T = ModularExponentiation(a, d, n);
 
-	if (T == 1 || T == i - 1)
-		return true;
+    if (T == 1 || T == n - 1)
+      return true;
 
-	for (j = 0; j < k; j++) {
-		T = FindT(T, 2, i);
-		if (T == 1)
-			return false;
-		if (T == i - 1)
-			return true;
-	}
-	return false;
+    for (int i = 0; i < k; i++) {
+      T = ModularExponentiation(T, 2, n);
+      if (T == 1)
+        return false;
+      if (T == n - 1)
+        return true;
+    }
+  }
+  return false;
 }
 
-big_int RSA::FindT(big_int a, int m, int n){
+big_int RSA::ModularExponentiation(big_int base, int exponent, int modulus){
   int r;
   big_int y = 1;
 
-	while (m > 0) {
-		r = m % 2;
-		FastExponention(r, n, &y, &a);
-		m = m / 2;
-	}
-  //std::cout << y << std::endl;
-	return y;
-}
-
-void RSA::FastExponention(int bit, int n, big_int *y, big_int *a){
-  if (bit == 1)
-    *y = (*y * (*a)) % n;
-
-  *a = (*a) * (*a) % n;
-}
-
-int RSA::GCD(int a, int b){
-  int q, r1, r2, r;
-
-	if (a > b) {
-		r1 = a;
-		r2 = b;
-	}
-	else {
-		r1 = b;
-		r2 = a;
-	}
-
-	while (r2 > 0) {
-		q = r1 / r2;
-		r = r1 - q * r2;
-		r1 = r2;
-		r2 = r;
-	}
-
-	return r1;
+//Right-to-left binary method
+  while (exponent > 0) {
+    r = exponent % 2;
+    if (r)
+      y = y * base % modulus;
+    base = base * base % modulus;
+    exponent = exponent>>1;
+  }
+  return y;
 }
 
 int RSA::ExtendedGCD(int a, int b){
-  int inv;
-  int q, r, r1 = a, r2 = b, t, t1 = 0, t2 = 1;
+  //ax + by = gcd(a,b)
+  int inv, x = 0, y = 1;
+  int q, temp, tempA = a;
 
-  while (r2 > 0) {
-    q = r1 / r2;
-    r = r1 % r2;
-    r1 = r2;
-    r2 = r;
+  while (b > 0) {
+    q = a / b; //Do not remove q
+    temp = a % b;
+    a = b;
+    b = temp;
 
-    t = t1 - q * t2;
-    t1 = t2;
-    t2 = t;
+    temp = x - q * y;
+    x = y;
+    y = temp;
   }
 
-  if (r1 == 1)
-    inv = t1;
+  if (a == 1)
+    inv = x;
 
   if (inv < 0)
-    inv = inv + a;
+    inv = inv + tempA;
 
   return inv;
 }
 
-void RSA::Encryption(int value, std::ofstream& out){
-  big_int cipher;
-	cipher = FindT(value,publicKey , modulo);
-  out << cipher << " ";
-}
-
-void RSA::Decryption(int value, std::ofstream& out){
-  big_int decipher;
-  decipher = FindT(value, privateKey, modulo);
-  std::stringstream ss;
-  ss << decipher;
-  int temp;
-  ss >> temp;
-  out << (char)temp;
-}
-
-
-int main(void){
-  FILE *inp;
-  std::ofstream out;
-
+void RSA::Encryption(std::ifstream& inp, std::string plainFile, std::ofstream& out, std::string cipherFile){
+  inp.open(plainFile);
   // destroy contents of these files (from previous runs, if any)
-  out.open("cipher.txt");
+  out.open(cipherFile);
   out.close();
-  out.open("decipher.txt");
-  out.close();
-
-  srand (time(NULL));
-  RSA rsa;
-
-  inp = fopen("plain.txt", "r+");
-  if (inp == NULL) {
+  // Check if files can be opened.
+  if (!inp) {
     printf("Error opening Source File.\n");
     exit(1);
   }
 
-  out.open("cipher.txt");
+  out.open(cipherFile);
   if (!out) {
     printf("Error opening Destination File.\n");
     exit(1);
   }
-
-  // encryption starts
+  
   while (true) {
-    char ch = getc(inp);
-    if (ch == -1)
+    char ch;
+    inp.read(&ch,1);
+    if (inp.eof())
       break;
     int value = toascii(ch);
-    rsa.Encryption(value, out);
+    big_int cipher;
+	  cipher = ModularExponentiation(value,publicKey , modulo);
+    out << cipher << " ";
   }
+  
+  inp.close();
+  out.close();
+}
 
-	fclose(inp);
-	out.close();
+void RSA::Decryption(std::ifstream& inp, std::string cipherFile, std::ofstream& out, std::string decipherFile){
+  inp.open(cipherFile);
+  // destroy contents of these files (from previous runs, if any)
+  out.open(decipherFile);
+  out.close();
 
-	// decryption starts
-	inp = fopen("cipher.txt", "r");
-	if (inp == NULL) {
-		printf("Error opening Cipher Text.\n");
-		exit(1);
-	}
-
-  out.open("decipher.txt");
-  if (!out) {
-    printf("Error opening File.\n");
+  // Check if files can be opened.
+  if (!inp) {
+    std::cout << "Error opening Cipher Text.\n";
     exit(1);
   }
 
+  out.open(decipherFile);
+  if (!out) {
+    std::cout << "Error opening File.\n";
+    exit(1);
+  }
+  
   while (1) {
-    int cip;
-    if (fscanf(inp, "%d", &cip) == -1)
+    big_int cipherNum;
+    std::stringstream ss;
+    big_int decipher;
+    int temp;
+    
+    if (!(inp >> cipherNum))
       break;
-    rsa.Decryption(cip, out);
+
+    decipher = ModularExponentiation(cipherNum, privateKey, modulo);
+    ss << decipher;
+    ss >> temp;
+    out << (char)temp;
   }
   out.close();
+  inp.close();
+}
+
+int main(void){
+  // Create two file handles
+  std::ifstream inp;
+  std::ofstream out;
+
+  srand (time(NULL));
+  RSA rsa;
+
+  // encryption stage
+  rsa.Encryption(inp,"plain.txt", out, "cipher.txt");
+
+  // decryption stage
+  rsa.Decryption(inp, "cipher.txt", out, "decipher.txt");
 
   return 0;
 }
+
+
+
+
+
