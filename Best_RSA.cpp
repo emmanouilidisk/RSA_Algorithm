@@ -7,12 +7,14 @@
 using big_int = boost::multiprecision::cpp_int;
 
 class RSA {
-  int privateKey;
-  int publicKey;
-  int modulo;
-  bool PrimalityTest(int IterNum, int i);
-  big_int ModularExponentiation(big_int a, int m, int n);
-  int ExtendedGCD(int a, int b);
+  big_int privateKey;
+  big_int publicKey;
+  big_int modulo;
+  big_int GenerateNum(int NumOfDigits);
+  bool PrimalityTest(int IterNum, big_int n);
+  big_int ModularExponentiation(big_int a, big_int m, big_int n);
+  big_int GCD(big_int a, big_int b);
+  big_int ExtendedGCD(big_int a, big_int b);
   public:
   RSA();
   void Encryption(std::ifstream& inp, std::string plainFile, std::ofstream& out, std::string cipherFile);
@@ -20,39 +22,58 @@ class RSA {
 };
 
 RSA::RSA(){
-    int p, q;
-    int phi_n;
+    big_int p, q;
+    big_int phi_n;
     do {
       do
-      p = rand();
+        p = GenerateNum(309); //1024 bit
       while (p % 2 == 0);
-    } while (!PrimalityTest(20, p));
-
+    } while (!PrimalityTest(15, p));
   do {
     do
-      q = rand();
+      q = GenerateNum(309); 
     while (q % 2 == 0);
-  } while (!PrimalityTest(20, q));
+  } while (!PrimalityTest(15, q));
 
   modulo = p * q;
   phi_n = (p - 1) * (q - 1);
 
   do
-    publicKey = rand() % (phi_n - 2) + 2; // 1 < publicKey < phi_n
-  while (std::__gcd(publicKey, phi_n) != 1);
+    publicKey = GenerateNum(617) % (phi_n - 2) + 2; // 1 < publicKey < phi_n
+  while (GCD(publicKey, phi_n) != 1);
 
   privateKey = ExtendedGCD(phi_n, publicKey);
 }
 
-bool RSA::PrimalityTest(int IterNum, int n){
-  if (n%3 == 0|| n%5 == 0|| n%7 == 0||n%11 == 0)
-    return false;
+big_int RSA::GenerateNum(int NumOfDigits){
+  big_int Num;
+  int temp;
+  std::stringstream ss;
+  temp = rand()%9+1; //Make sure the first number is not 0
+  ss << temp;
+  for (int i = 0; i < NumOfDigits; i++)
+  {
+    temp = rand()%10;
+    ss << temp;
+  }
+  ss >> Num;
+  return Num;
+}
+
+bool RSA::PrimalityTest(int IterNum, big_int n){
+  int primes[] = {3,5,7,11,13,17,19,23,29,31,37,41,43,47};
+  for (int i = 0; i < 14; i++)
+  {
+    if (n%primes[i]==0)
+      return false;
+  }
+
   for (int j = 0; j < IterNum; ++j){
-    int d = n - 1;
-    int k = 0;
+    big_int d = n - 1;
+    big_int k = 0;
     big_int T;
     // select a random base
-    int a = 2 + rand() % (n - 4); 
+    big_int a = 2 + rand() % (n - 4); 
 
     // Find d,k such that n = (2^k)*d + 1
     while (d % 2 == 0) {
@@ -77,8 +98,8 @@ bool RSA::PrimalityTest(int IterNum, int n){
   return false;
 }
 
-big_int RSA::ModularExponentiation(big_int base, int exponent, int modulus){
-  int r;
+big_int RSA::ModularExponentiation(big_int base, big_int exponent, big_int modulus){
+  big_int r;
   big_int y = 1;
 
 //Right-to-left binary method
@@ -92,10 +113,29 @@ big_int RSA::ModularExponentiation(big_int base, int exponent, int modulus){
   return y;
 }
 
-int RSA::ExtendedGCD(int a, int b){
+big_int RSA::GCD(big_int a, big_int b)
+{
+  big_int temp;
+
+  if (a < b) {
+    temp = a;
+    a = b;
+    b = temp;
+  }
+
+  while (b > 0) {
+    temp = a % b;
+    a = b;
+    b = temp;
+  }
+
+  return a;
+}
+
+big_int RSA::ExtendedGCD(big_int a, big_int b){
   //ax + by = gcd(a,b)
-  int inv, x = 0, y = 1;
-  int q, temp, tempA = a;
+  big_int inv, x = 0, y = 1;
+  big_int q, temp, tempA = a;
 
   while (b > 0) {
     q = a / b; //Do not remove q
