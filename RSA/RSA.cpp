@@ -1,25 +1,40 @@
 #include "RSA.h"
 
 RSA::RSA(){
-    big_int p, q;
-    big_int phi_n;
-    do {
-      do
-        p = GenerateNum(309); //1024 bit
-      while (p % 2 == 0);
-      std::cout << "try" << std::endl;
-    } while (!PrimalityTest(15, p));
+  big_int p1, p2, p3, p4;
+  big_int phi_n;
+  //create threads for faster computation
+  // thread 1
+  std::promise<big_int> promisedP1;
+  std::future<big_int> futureP1 = promisedP1.get_future();
+  std::thread th1(&RSA::GeneratePrime, this, &promisedP1);
+
+  // // thread 2
+  // std::promise<big_int> promisedP2;
+  // std::future<big_int> futureP2 = promisedP2.get_future();
+  // std::thread th2(&RSA::GeneratePrime, this, &promisedP2);
+
+  // // thread 3
+  // std::promise<big_int> promisedP3;
+  // std::future<big_int> futureP3 = promisedP3.get_future();
+  // std::thread th3(&RSA::GeneratePrime, this, &promisedP3);
+    
   do {
     do
-      q = GenerateNum(309); 
-    while (q % 2 == 0);
-  } while (!PrimalityTest(15, q));
-
-  modulo = p * q;
-  phi_n = (p - 1) * (q - 1);
-
+      p4 = GenerateNum(1024); 
+    while (p4 % 2 == 0);
+  } while (!PrimalityTest(20, p4));
+  p1 = futureP1.get();
+  // p2 = futureP2.get();
+  // p3 = futureP3.get();
+  // Waiting for threads to finish
+  th1.join();
+  // th2.join();
+  // th3.join();
+  modulo = p1 * p4;
+  phi_n = (p1 - 1) * (p4 - 1);
   do
-    publicKey = GenerateNum(617) % (phi_n - 2) + 2; // 1 < publicKey < phi_n
+    publicKey = GenerateNum(2048) % (phi_n - 2) + 2; // 1 < publicKey < phi_n
   while (GCD(publicKey, phi_n) != 1);
 
   privateKey = ExtendedGCD(phi_n, publicKey);
@@ -33,8 +48,19 @@ big_int RSA::GetModulo(){
   return modulo;
 }
 
-big_int RSA::GenerateNum(int NumOfDigits){
+void RSA::GeneratePrime(std::promise<big_int> * promObj){
+  big_int num;
+  do {
+    do
+      num = GenerateNum(1024);
+    while (num % 2 == 0);
+  } while (!PrimalityTest(20, num));
+  promObj->set_value(num);
+}
+
+big_int RSA::GenerateNum(int NumOfBits){
   big_int Num;
+  int NumOfDigits = NumOfBits/3.321928095 + 1;
   int temp;
   std::stringstream ss;
   temp = rand()%9+1; //Make sure the first number is not 0
