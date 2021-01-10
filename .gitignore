@@ -1,4 +1,5 @@
 RSA/build/
 RSA/boost_1_66_0/
+RSA/.vscode/
 *.exe
 *.o
