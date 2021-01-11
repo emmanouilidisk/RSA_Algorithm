@@ -3,13 +3,13 @@ project(RSA VERSION 0.1.0)
 
 add_executable(${PROJECT_NAME}
 main.cpp
-RSA.h
-RSA.cpp
+../src/RSA.h
+../src/RSA.cpp
 )
 
 target_include_directories(
   ${PROJECT_NAME} 
-  PRIVATE boost_1_66_0/
+  PRIVATE ../boost_1_66_0/
 )
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})

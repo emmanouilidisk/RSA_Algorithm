@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
-#include "boost_1_66_0/boost/multiprecision/cpp_int.hpp"
+#include "../boost_1_66_0/boost/multiprecision/cpp_int.hpp"
 #include <iostream>
 #include <thread>
 #include <future>

@@ -1,4 +1,4 @@
-#include "RSA.h"
+#include "../src/RSA.h"
 
 int main(void){
   // Create two file handles
