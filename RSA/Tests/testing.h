@@ -1,11 +1,4 @@
 #include "../src/RSA.h"
-#include <algorithm>
-#include <iterator>
-#include <string>
-#include <fstream>
-#include <ctime>
-#include <unistd.h>
-
 
 template<typename InputIterator1, typename InputIterator2>
 bool range_equal(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2);
