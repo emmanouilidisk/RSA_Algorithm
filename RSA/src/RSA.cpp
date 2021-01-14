@@ -1,38 +1,24 @@
 #include "RSA.h"
 
 RSA::RSA(){
-  big_int p1, p2, p3, p4;
+  big_int p, q;
   big_int phi_n;
   //create threads for faster computation
   // thread 1
-  std::promise<big_int> promisedP1;
-  std::future<big_int> futureP1 = promisedP1.get_future();
-  std::thread th1(&RSA::GeneratePrime, this, &promisedP1);
-
-  // // thread 2
-  // std::promise<big_int> promisedP2;
-  // std::future<big_int> futureP2 = promisedP2.get_future();
-  // std::thread th2(&RSA::GeneratePrime, this, &promisedP2);
-
-  // // thread 3
-  // std::promise<big_int> promisedP3;
-  // std::future<big_int> futureP3 = promisedP3.get_future();
-  // std::thread th3(&RSA::GeneratePrime, this, &promisedP3);
+  std::promise<big_int> promisedP;
+  std::future<big_int> futureP = promisedP.get_future();
+  std::thread th1(&RSA::GeneratePrime, this, &promisedP);
     
   do {
     do
-      p4 = GenerateNum(1024); 
-    while (p4 % 2 == 0);
-  } while (!PrimalityTest(20, p4));
-  p1 = futureP1.get();
-  // p2 = futureP2.get();
-  // p3 = futureP3.get();
-  // Waiting for threads to finish
+      q = GenerateNum(1024); 
+    while (q % 2 == 0);
+  } while (!PrimalityTest(20, q));
+  p = futureP.get();
+  // Waiting for thread to finish
   th1.join();
-  // th2.join();
-  // th3.join();
-  modulo = p1 * p4;
-  phi_n = (p1 - 1) * (p4 - 1);
+  modulo = p * q;
+  phi_n = (p - 1) * (q - 1);
   do
     publicKey = GenerateNum(2048) % (phi_n - 2) + 2; // 1 < publicKey < phi_n
   while (GCD(publicKey, phi_n) != 1);
