@@ -191,6 +191,38 @@ void RSA::Encryption(std::ifstream& inp, std::string plainFile, std::ofstream& o
   out.close();
 }
 
+void RSA::EncryptionWithForeignKey(std::ifstream& inp, std::string plainFile, std::ofstream& out, std::string cipherFile, big_int ForeignModulo, big_int ForeignPublicKey) {
+  inp.open(plainFile);
+  // destroy contents of these files (from previous runs, if any)
+  out.open(cipherFile);
+  out.close();
+  // Check if files can be opened.
+  if (!inp) {
+    printf("Error opening Source File.\n");
+    exit(1);
+  }
+
+  out.open(cipherFile);
+  if (!out) {
+    printf("Error opening Destination File.\n");
+    exit(1);
+  }
+
+  while (true) {
+    char ch;
+    inp.read(&ch, 1);
+    if (inp.eof())
+      break;
+    int value = toascii(ch);
+    big_int cipher;
+    cipher = ModularExponentiation(value, ForeignPublicKey, ForeignModulo);
+    out << cipher << " ";
+  }
+
+  inp.close();
+  out.close();
+}
+
 void RSA::Decryption(std::ifstream& inp, std::string cipherFile, std::ofstream& out, std::string decipherFile){
     inp.open(cipherFile);
   // destroy contents of these files (from previous runs, if any)

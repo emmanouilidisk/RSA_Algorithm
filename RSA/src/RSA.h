@@ -21,6 +21,7 @@ class RSA {
   public:
   RSA();
   void Encryption(std::ifstream& inp, std::string plainFile, std::ofstream& out, std::string cipherFile);
+  void RSA::EncryptionWithForeignKey(std::ifstream& inp, std::string plainFile, std::ofstream& out, std::string cipherFile, big_int ForeignModulo, big_int ForeignPublicKey);
   void Decryption(std::ifstream& inp, std::string cipherFile, std::ofstream& out, std::string decipherFile);
   big_int GetPublicKey();
   big_int GetModulo();
