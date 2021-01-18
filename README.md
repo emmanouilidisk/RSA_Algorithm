@@ -23,3 +23,6 @@ To run the tests, follow the same procedure
 Link Overleaf: https://www.overleaf.com/5377759678bsryrnmtscdk
 
 Google Slides: https://docs.google.com/presentation/d/1MA-u-ZCHSACHJGZN0hokGA0RBlDJ-mfX0qpQqUVqWjA/edit?usp=sharing
+Google Themes: 
+- https://slidesgo.com/theme/tech-company-branding-guidelines
+- https://slidesgo.com/theme/honeycomb-project-proposal
