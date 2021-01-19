@@ -74,9 +74,9 @@ Contributions are what make the open source community such an amazing place to b
 Contribute following the above steps:
 
 1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
+2. Create your Feature Branch (`git checkout -b new_branch_name`)
+3. Commit your Changes (`git commit -m 'Add some extra functionality'`)
+4. Push to the Branch (`git push origin new_branch_name`)
 5. Open a Pull Request  
 
 Link Overleaf: https://www.overleaf.com/5377759678bsryrnmtscdk
