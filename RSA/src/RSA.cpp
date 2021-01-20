@@ -161,7 +161,8 @@ big_int RSA::ExtendedGCD(big_int a, big_int b){
   return inv;
 }
 
-void RSA::Encryption(std::ifstream& inp, std::string plainFile, std::ofstream& out, std::string cipherFile){
+void RSA::Encryption(std::ifstream& inp, std::string plainFile,
+										std::ofstream& out, std::string cipherFile){
   inp.open(plainFile);
   // destroy contents of these files (from previous runs, if any)
   out.open(cipherFile);
@@ -193,7 +194,8 @@ void RSA::Encryption(std::ifstream& inp, std::string plainFile, std::ofstream& o
   out.close();
 }
 
-void RSA::EncryptionWithForeignKey(std::ifstream& inp, std::string plainFile, std::ofstream& out, std::string cipherFile, big_int ForeignModulo, big_int ForeignPublicKey) {
+void RSA::EncryptionWithForeignKey(std::ifstream& inp, std::string plainFile, std::ofstream& out,
+													std::string cipherFile, big_int ForeignModulo, big_int ForeignPublicKey) {
   inp.open(plainFile);
   // destroy contents of these files (from previous runs, if any)
   out.open(cipherFile);
@@ -225,7 +227,8 @@ void RSA::EncryptionWithForeignKey(std::ifstream& inp, std::string plainFile, st
   out.close();
 }
 
-void RSA::Decryption(std::ifstream& inp, std::string cipherFile, std::ofstream& out, std::string decipherFile){
+void RSA::Decryption(std::ifstream& inp, std::string cipherFile, 
+										 std::ofstream& out, std::string decipherFile){
     inp.open(cipherFile);
   // destroy contents of these files (from previous runs, if any)
   out.open(decipherFile);
