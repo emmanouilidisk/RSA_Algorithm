@@ -9,30 +9,6 @@
 
 
 
-<!-- TABLE OF CONTENTS -->
-<details open="open">
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#demo">Live Demo</a>
-    </li>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#contributing">Contributing</a></li>
-  </ol>
-</details>
-
-
-<!-- DEMO -->
-## Live Demo
 <p align="center">
 <img src="https://github.com/emmanouilidisk/computer_system_security/blob/main/Demonstration.gif" align="center" width="557" height="300" />
 </p>
