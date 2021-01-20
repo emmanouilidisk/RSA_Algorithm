@@ -38,7 +38,7 @@ The implementation uses:
 - two primes to calculate n    
 - extended GCD method to find the private key(d)    
 - Miller-Rabin for primality checking  
-- key size 2048 (but it can be easilyadjusted for any key size)  
+- key size 2048 (but it can be easily adjusted for any key size)  
 
 
 <!-- GETTING STARTED -->
