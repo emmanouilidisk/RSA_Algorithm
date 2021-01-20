@@ -34,12 +34,12 @@
 The repository includes a class implementing RSA algorithm, an example showing its use and a script to test it. 
 The algorithm was implemented in the Computer Systems Security course of the 9th semester of DUTh.
   
-
 The implementation uses:
 - two primes to calculate n    
 - extended GCD method to find the private key(d)    
 - Miller-Rabin for primality checking  
 - key size 2048 (but it can be easily adjusted for any key size)  
+
 <p align="center">
 <img src="https://github.com/emmanouilidisk/computer_system_security/blob/main/Demonstration.gif" align="center" width="557" height="300" />
 </p>
