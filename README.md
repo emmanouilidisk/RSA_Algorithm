@@ -10,7 +10,7 @@
 
 
 <p align="center">
-<img src="https://github.com/emmanouilidisk/computer_system_security/blob/main/Demonstration.gif" align="center" width="557" height="300" />
+<img src="https://github.com/emmanouilidisk/computer_system_security/blob/main/Demonstration.gif" align="center" width="742" height="400" />
 </p>
 
 
