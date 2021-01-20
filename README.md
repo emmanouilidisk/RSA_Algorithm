@@ -32,8 +32,9 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 The repository includes a class implementing RSA algorithm, an example showing its use and a script to test it. 
-The algorithm was implemented in the Computer Systems Security course of the 9th semester of DUTh. 
-![Alt Text](https://github.com/emmanouilidisk/computer_system_security/blob/main/Demonstration.gif)  
+The algorithm was implemented in the Computer Systems Security course of the 9th semester of DUTh.
+
+<img src="https://github.com/emmanouilidisk/computer_system_security/blob/main/Demonstration.gif" width="800" height="400"/>
 
 The implementation uses:
 - two primes to calculate n    
