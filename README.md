@@ -34,7 +34,7 @@
 The repository includes a class implementing RSA algorithm, an example showing its use and a script to test it. 
 The algorithm was implemented in the Computer Systems Security course of the 9th semester of DUTh.
   
-The implementation uses:
+This implementation uses:
 - two primes to calculate n    
 - extended GCD method to find the private key(d)    
 - Miller-Rabin for primality checking  
