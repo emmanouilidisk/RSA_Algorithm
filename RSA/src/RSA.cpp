@@ -162,7 +162,7 @@ big_int RSA::ExtendedGCD(big_int a, big_int b){
 }
 
 void RSA::Encryption(std::ifstream& inp, std::string plainFile,
-										std::ofstream& out, std::string cipherFile){
+	std::ofstream& out, std::string cipherFile){
   inp.open(plainFile);
   // destroy contents of these files (from previous runs, if any)
   out.open(cipherFile);
@@ -186,7 +186,7 @@ void RSA::Encryption(std::ifstream& inp, std::string plainFile,
       break;
     int value = toascii(ch);
     big_int cipher;
-	  cipher = ModularExponentiation(value,publicKey , modulo);
+    cipher = ModularExponentiation(value,publicKey , modulo);
     out << cipher << " ";
   }
   
@@ -195,7 +195,7 @@ void RSA::Encryption(std::ifstream& inp, std::string plainFile,
 }
 
 void RSA::EncryptionWithForeignKey(std::ifstream& inp, std::string plainFile, std::ofstream& out,
-													std::string cipherFile, big_int ForeignModulo, big_int ForeignPublicKey) {
+		std::string cipherFile, big_int ForeignModulo, big_int ForeignPublicKey) {
   inp.open(plainFile);
   // destroy contents of these files (from previous runs, if any)
   out.open(cipherFile);
@@ -228,8 +228,8 @@ void RSA::EncryptionWithForeignKey(std::ifstream& inp, std::string plainFile, st
 }
 
 void RSA::Decryption(std::ifstream& inp, std::string cipherFile, 
-										 std::ofstream& out, std::string decipherFile){
-    inp.open(cipherFile);
+	std::ofstream& out, std::string decipherFile){
+  inp.open(cipherFile);
   // destroy contents of these files (from previous runs, if any)
   out.open(decipherFile);
   out.close();
