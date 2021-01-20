@@ -64,9 +64,3 @@ Contribute following the above steps:
 4. Push to the Branch (`git push origin new_branch_name`)
 5. Open a Pull Request  
 
-Link Overleaf: https://www.overleaf.com/5377759678bsryrnmtscdk
-
-Google Slides: https://docs.google.com/presentation/d/1MA-u-ZCHSACHJGZN0hokGA0RBlDJ-mfX0qpQqUVqWjA/edit?usp=sharing  
-
-
-
