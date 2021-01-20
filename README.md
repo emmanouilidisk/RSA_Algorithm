@@ -63,4 +63,3 @@ Contribute following the above steps:
 3. Commit your Changes (`git commit -m 'Add some extra functionality'`)
 4. Push to the Branch (`git push origin new_branch_name`)
 5. Open a Pull Request  
-
