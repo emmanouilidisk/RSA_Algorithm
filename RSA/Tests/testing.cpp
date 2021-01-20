@@ -1,7 +1,8 @@
 #include"testing.h"
 
 template<typename InputIterator1, typename InputIterator2>
-bool range_equal(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2){
+bool range_equal(InputIterator1 first1, InputIterator1 last1,
+                 InputIterator2 first2, InputIterator2 last2){
   while(first1 != last1 && first2 != last2){
       if(*first1 != *first2) return false;
       ++first1;
@@ -60,7 +61,8 @@ int testing(int max_iter){
     if(compare_files("plain.txt", "decipher.txt")) correct_results++;
 
     //print wrong results every 100 tests
-    if(i % 10 == 0) std::cout << "Number of correct results so far: " << correct_results << " out of " << i+1 << "\n";
+    if(i % 10 == 0) std::cout << "Number of correct results so far: " 
+      << correct_results << " out of " << i+1 << "\n";
   }
   return correct_results;
 }
